@@ -1,2 +1,6 @@
-# LPIC-1
-Peyman Hooshmand's LPIC-1 course slides
+# LPIC-1 Book
+
+My LPIC-1 course slides
+
+* [Block Devices](slides/block-devices.md)
+
