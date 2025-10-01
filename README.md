@@ -2,5 +2,6 @@
 
 My LPIC-1 course slides
 
-* [Block Devices](slides/block-devices.md)
+## Chapter 1: Block Devices
+* [Disks as Block Devices](slides/block-devices.md)
 
