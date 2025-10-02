@@ -1,6 +1,6 @@
 # Disks as Block Devices
 
-A block device is any device that supports **random access** in fixed-size **chunks**(sectors typically 512 byte or 4 KiB).
+A block device is any device that supports **random access** in fixed-size **chunks** (sectors typically 512 byte or 4 KiB).
 
 **Random access** means you can directly jump to any location on the device and read/write there, without having to go through the data in sequence.
 
@@ -9,13 +9,13 @@ In Linux, disks of different types(HDD, SSD, NVMe, USB, Fibre Channel) are expos
 The kernel assigns them names under `/dev`. like `/dev/sda`, `/dev/sdb`, `/dev/nvme0n1`.
 
 ### Character Devices
-Character devices are sequential access devices (like a **tape drive**, or a **network socket**) forces you to read data in order, from beginning to end. If you want data that’s in the middle, you still have to pass through everything before it.
+Character devices are sequential access devices (like a **tape drive**, or a **network socket**) that forces you to read data in order, from beginning to end. If you want data that’s in the middle, you still have to pass through everything before it.
 
-## Storage Systems
+## Storage Interfaces
 
 ### PATA (Parallel ATA)
 
-Also known as **IDE** (Integrated Drive Electronics) is an obsolete technology. It uses a parallel data bus with 40- or 80-wire ribbon cable. Devices in Linux appear as `/dev/hdX`.
+Also known as **IDE** (Integrated Drive Electronics) is an obsolete technology that uses a parallel data bus with 40- or 80-wire ribbon cable. IDE devices in Linux appear as `/dev/hd?`.
 
 * Used in Personal Computers
 * Max Devices per Port: 2 (master/slave)
@@ -30,7 +30,7 @@ Legacy SCSI devices were parallel SCSI.
 * Parallel architecture supports multiple devices on a single bus (up to 16 devices)
 * Asynchronous operations
 
-The Linux kernel's SCSI subsystem is a modular, layered architecture that supports SCSI and even non SCSI devices. The following storage protocols are handled by SCSI subsystem.
+The Linux kernel's SCSI subsystem is a modular and layered architecture that supports SCSI and even non SCSI devices. The following storage protocols are handled by SCSI subsystem.
 
 * SAS
 * SATA
@@ -48,7 +48,7 @@ Every device handled by SCSI subsystem appears as `/dev/sd?` (sd = SCSI disk) di
 
 ### SAS (Serial Attached SCSI)
 
-SAS (Serial Attached SCSI) belongs to SCSI family. SAS is a point-to-point serial transport for SCSI commands replaces older parallel SCSI buses. SAS directly carries SCSI commands over a serial link.
+SAS belongs to SCSI family. SAS is a point-to-point serial transport for SCSI commands replaces older parallel SCSI buses. SAS directly carries SCSI commands over a serial link.
 
 * Used in Enterprise
   - Servers
@@ -61,7 +61,7 @@ SAS (Serial Attached SCSI) belongs to SCSI family. SAS is a point-to-point seria
 
 ### SATA (Serial ATA)
 
-SATA uses the **ATA command set**, but Linux does not talk ATA directly. **libata** translates ATA commands into the SCSI command set. Thus SATA drives are exposed as SCSI devices. It was invented to replace PATA/IDE.
+SATA uses the **ATA command set** not SCSI coomands, but Linux does not talk ATA directly. **libata** translates ATA commands into the SCSI command. Thus SATA drives are exposed as SCSI devices. It was invented to replace PATA/IDE.
 
 * Used in Desktops and Laptops:
   - Low cost
@@ -93,10 +93,26 @@ FCoE encapsulates Fibre Channel frames inside Ethernet frames. So instead of a d
 
 NVMe is designed for SSDs and uses PCIe bus (direct CPU link) bypassing entire SCSI stack. It has its own Linux kernel subsystem.
 
+NVMe disks appear as `/dev/nvme0n1`, `/dev/nvme0n2`
+
 * High-performance Desktops, Servers and Laptops
 * Max Speed: 112 Gbit/s
 
-### Virtio-blk
+### VirtIO-blk
+
+It provides drivers that allow the guest OS to communicate directly with the host's hardware emulation, reducing overhead compared to fully emulated devices like emulating a full SCSI controller.
+
+It implements a simple, high-performance protocol for read/write operations, bypassing slower emulation layers. In the Linux kernel, this is the **virtio_blk** module.
+
+VirtIO-blk disks appear as `/dev/vda`, `/dev/vdb`
+
+* Used in VMware, KVM, Xen and QEMU
+* Max Speed: VirtIO-blk can achieve near-native speeds
 
 ### Loop Devices
+
+Loop devices are a kernel feature that creates virtual block devices from regular files on disk , allowing you to treat file-based images (e.g., disk images, ISO files) as if they were physical block devices.
+
+Loop devices appear as `/dev/loop0`, `/dev/loop1`
+
 
